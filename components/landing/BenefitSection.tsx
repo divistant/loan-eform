@@ -3,6 +3,28 @@
 import { Percent, Zap, ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
 
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+    },
+  },
+};
+
+const item = {
+  hidden: { opacity: 0, y: 30 },
+  show: { 
+    opacity: 1, 
+    y: 0,
+    transition: {
+      type: "spring" as const,
+      stiffness: 100,
+    },
+  },
+};
+
 export function BenefitSection() {
   const benefits = [
     {
@@ -25,23 +47,33 @@ export function BenefitSection() {
   return (
     <section className="py-24 bg-white">
       <div className="container">
-        <div className="text-center mb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-16"
+        >
           <h2 className="text-3xl font-bold tracking-tight text-brand-900 sm:text-4xl">
             Kenapa Memilih Bank Jakarta?
           </h2>
           <p className="mt-4 text-lg text-zinc-600 max-w-2xl mx-auto">
             Kami berkomitmen memberikan layanan finansial terbaik dengan transparansi dan keamanan tinggi.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <motion.div
+          variants={container}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.2 }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-8"
+        >
           {benefits.map((benefit, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.2, duration: 0.5 }}
+              variants={item}
+              whileHover={{ y: -5 }}
               className="bg-brand-50 rounded-2xl p-8 text-center hover:shadow-lg transition-shadow duration-300 border border-brand-100"
             >
               <div className="bg-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6 shadow-sm">
@@ -55,7 +87,7 @@ export function BenefitSection() {
               </p>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -154,7 +154,7 @@ export function StepScreening() {
 
         <Button 
           type="submit" 
-          className="w-full bg-[#D94E27] hover:bg-[#B83D1B] text-white font-semibold h-12 rounded-md transition-colors"
+          className="w-full bg-brand-500 hover:bg-brand-600 text-white font-semibold h-12 rounded-md transition-all duration-300"
           disabled={isSubmitting}
         >
           {isSubmitting ? (

@@ -153,7 +153,7 @@ export function StepOtp() {
 
           <Button 
             type="submit" 
-            className="w-full bg-[#D94E27] hover:bg-[#B83D1B] text-white font-semibold h-12 rounded-md transition-colors"
+            className="w-full bg-brand-500 hover:bg-brand-600 text-white font-semibold h-12 rounded-md transition-all duration-300"
             disabled={isLoading || form.watch("code").length !== 4}
           >
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

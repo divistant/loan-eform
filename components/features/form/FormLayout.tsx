@@ -50,7 +50,7 @@ export function FormLayout({
                       isCompleted
                         ? "border-green-600 bg-green-600 text-white"
                         : isCurrent
-                        ? "bg-[#D94E27] text-white border-[#D94E27] shadow-[0_0_0_4px_rgba(217,78,39,0.2)]"
+                        ? "bg-brand-500 text-white border-brand-500 shadow-[0_0_0_4px_rgba(217,78,39,0.2)]"
                         : "bg-white text-gray-400 border-gray-300"
                     )}
                   >
@@ -77,7 +77,7 @@ export function FormLayout({
                     {/* Active Line Progress */}
                     <div 
                       className={cn(
-                        "absolute inset-y-0 left-0 bg-[#D94E27] transition-all duration-300",
+                        "absolute inset-y-0 left-0 bg-brand-500 transition-all duration-300",
                         isCompleted ? "w-full" : "w-0"
                       )}
                     />

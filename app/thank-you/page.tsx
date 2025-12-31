@@ -16,14 +16,14 @@ export default function ThankYouPage() {
       >
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-zinc-100">
           {/* Header Section */}
-          <div className="bg-[#D94E27] p-8 text-center">
+          <div className="bg-brand-500 p-8 text-center">
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
               className="mx-auto bg-white rounded-full h-20 w-20 flex items-center justify-center mb-4"
             >
-              <CheckCircle className="h-10 w-10 text-[#D94E27]" />
+              <CheckCircle className="h-10 w-10 text-brand-500" />
             </motion.div>
             <h1 className="text-2xl font-bold text-white mb-2">
               Pengajuan Berhasil Diterima!
@@ -101,7 +101,7 @@ export default function ThankYouPage() {
 
               {/* Action Buttons */}
               <div className="pt-4">
-                <Button className="w-full bg-[#D94E27] hover:bg-[#B83D1B] text-white font-semibold h-11" asChild>
+                <Button className="w-full bg-brand-500 hover:bg-brand-600 text-white font-semibold h-11 transition-all duration-300" asChild>
                   <Link href="/">
                     Kembali ke Beranda
                   </Link>

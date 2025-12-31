@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Info } from "lucide-react";
-import Link from "next/link";
 
 export function HeroSection() {
   const scrollToProducts = (e: React.MouseEvent) => {
@@ -53,12 +52,42 @@ export function HeroSection() {
         </div>
       </div>
       
-      {/* Decorative background elements */}
-      <div className="absolute top-0 left-1/2 -z-10 -translate-x-1/2 blur-3xl opacity-30 z-0 pointer-events-none" aria-hidden="true">
+      {/* Decorative background elements with floating animation */}
+      <motion.div 
+        className="absolute top-0 left-1/2 -z-10 -translate-x-1/2 blur-3xl opacity-30 z-0 pointer-events-none" 
+        aria-hidden="true"
+        animate={{
+          y: [0, -20, 0],
+          scale: [1, 1.05, 1],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      >
         <div className="aspect-[1155/678] w-[72.1875rem] bg-gradient-to-tr from-brand-100 to-brand-500" 
              style={{ clipPath: 'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)' }} 
         />
-      </div>
+      </motion.div>
+
+      {/* Additional floating blob */}
+      <motion.div 
+        className="absolute bottom-0 right-0 -z-10 blur-3xl opacity-20 pointer-events-none"
+        aria-hidden="true"
+        animate={{
+          x: [0, 30, 0],
+          y: [0, -30, 0],
+          scale: [1, 1.1, 1],
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      >
+        <div className="aspect-square w-[40rem] rounded-full bg-gradient-to-br from-brand-500 to-brand-100" />
+      </motion.div>
     </section>
   );
 }

@@ -1,36 +1,157 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Bank Jakarta E-Form Application
 
-## Getting Started
+Aplikasi formulir digital untuk pengajuan produk Bank Jakarta dengan multi-step wizard form.
 
-First, run the development server:
+## 🚀 Fitur
 
+- **Landing Page** dengan informasi produk pinjaman
+- **Product Selection** - Pilih produk pinjaman yang sesuai
+- **Multi-Step Form Wizard**:
+  - Step 1: Screening (kelayakan awal)
+  - Step 2: Identity (data pribadi)
+  - Step 3: OTP Verification
+  - Step 4: Consent (persetujuan)
+- **Responsive Design** - Optimized untuk desktop & mobile
+- **Modern UI** - Menggunakan Tailwind CSS & Shadcn/ui
+- **Form Validation** - Validasi menggunakan Zod & React Hook Form
+- **State Management** - Zustand untuk global state
+- **Mock API** - Built-in mock API untuk development
+
+## 📋 Prerequisites
+
+- Node.js 18.x atau lebih tinggi
+- npm atau yarn
+
+## 🛠️ Instalasi
+
+1. Clone repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/divistant/loan-eform.git
+cd loan-eform
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Jalankan development server:
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Buka browser di [http://localhost:3000](http://localhost:3000)
 
-## Learn More
+## 📦 Build untuk Production
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run build
+npm start
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🌐 Deploy ke Vercel
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Opsi 1: Deploy via Vercel Dashboard (Recommended)
 
-## Deploy on Vercel
+1. Push kode ke GitHub repository
+2. Buka [Vercel Dashboard](https://vercel.com/new)
+3. Import repository GitHub Anda
+4. Vercel akan otomatis mendeteksi Next.js dan konfigurasi yang tepat
+5. Klik "Deploy"
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Opsi 2: Deploy via Vercel CLI
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Install Vercel CLI:
+```bash
+npm install -g vercel
+```
+
+2. Login ke Vercel:
+```bash
+vercel login
+```
+
+3. Deploy:
+```bash
+vercel
+```
+
+4. Untuk production deployment:
+```bash
+vercel --prod
+```
+
+## 🏗️ Struktur Project
+
+```
+bank-jakarta-eform/
+├── app/                      # Next.js App Router
+│   ├── api/mock/            # Mock API endpoints
+│   ├── apply/[productId]/   # Form wizard pages
+│   ├── thank-you/           # Success page
+│   └── page.tsx             # Landing page
+├── components/
+│   ├── features/            # Feature-specific components
+│   │   ├── form/           # Form wizard components
+│   │   └── product/        # Product components
+│   ├── landing/            # Landing page sections
+│   ├── layout/             # Layout components
+│   ├── ui/                 # Shadcn/ui components
+│   └── providers/          # React Query provider
+├── lib/
+│   ├── store/              # Zustand store
+│   └── validators/         # Zod schemas
+├── types/                   # TypeScript types
+└── public/                  # Static assets
+```
+
+## 🔧 Tech Stack
+
+- **Framework**: Next.js 16.1 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS v4
+- **UI Components**: Shadcn/ui + Radix UI
+- **Forms**: React Hook Form + Zod
+- **State Management**: Zustand
+- **Data Fetching**: TanStack Query (React Query)
+- **Animation**: Framer Motion
+
+## 📝 Environment Variables
+
+Tidak ada environment variables yang required untuk menjalankan aplikasi ini karena menggunakan mock API. 
+
+Jika Anda ingin mengintegrasikan dengan API eksternal di masa depan, Anda bisa menambahkan:
+
+```env
+NEXT_PUBLIC_API_BASE_URL=https://your-api-url.com
+```
+
+## 🎨 Customization
+
+### Mengubah Tema
+Edit file `app/globals.css` untuk mengubah color scheme.
+
+### Menambah Produk
+Edit file `app/api/mock/products/route.ts` untuk menambah atau mengubah produk.
+
+### Mengubah Form Fields
+Edit schema di `lib/validators/form-schema.ts` dan komponen di `components/features/form/steps/`.
+
+## 📄 Dokumentasi Tambahan
+
+- [PRD.md](./PRD.md) - Product Requirements Document
+- [TECHNICAL_BLUEPRINT.md](./TECHNICAL_BLUEPRINT.md) - Technical Blueprint
+- [SHADCN_SETUP.md](./SHADCN_SETUP.md) - Shadcn/ui Setup Guide
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📞 Support
+
+Untuk pertanyaan atau dukungan, silakan buka issue di GitHub repository.
+
+## 📜 License
+
+This project is licensed under the MIT License.
+

@@ -27,7 +27,7 @@ export function FormWizard({ product }: FormWizardProps) {
   if (!isHydrated || !selectedProduct) {
     return (
       <div className="flex justify-center py-20">
-        <Loader2 className="h-8 w-8 animate-spin text-[#D94E27]" />
+        <Loader2 className="h-8 w-8 animate-spin text-brand-500" />
       </div>
     );
   }
@@ -45,7 +45,7 @@ export function FormWizard({ product }: FormWizardProps) {
               <p className="text-red-500 mb-4">Anda belum melakukan verifikasi.</p>
               <button 
                 onClick={() => useFormStore.getState().setStep(1)}
-                className="text-[#D94E27] underline"
+                className="text-brand-500 underline hover:text-brand-600"
               >
                 Kembali ke Verifikasi
               </button>
@@ -91,7 +91,7 @@ export function FormWizard({ product }: FormWizardProps) {
           <p className="text-sm text-gray-600">{selectedProduct.description}</p>
         </div>
         <div className="text-right">
-          <p className="text-sm font-bold text-[#D94E27] bg-white px-3 py-1 rounded-full border border-orange-100 shadow-sm">
+          <p className="text-sm font-bold text-brand-500 bg-white px-3 py-1 rounded-full border border-orange-100 shadow-sm">
             {selectedProduct.rate}
           </p>
         </div>
