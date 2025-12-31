@@ -40,7 +40,7 @@ export function Header() {
           : "border-transparent bg-white"
       )}
     >
-      <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
+      <div className="container mx-auto px-4 sm:px-8 lg:px-16 xl:px-20 2xl:px-24 flex h-16 items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <Image
             src="/images/Bank_Jakarta.svg"

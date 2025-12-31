@@ -46,7 +46,7 @@ export function BenefitSection() {
 
   return (
     <section className="py-24 bg-white">
-      <div className="container">
+      <div className="container mx-auto px-4 sm:px-8 lg:px-16 xl:px-20 2xl:px-24">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

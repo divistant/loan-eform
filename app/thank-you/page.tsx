@@ -7,12 +7,12 @@ import { motion } from "framer-motion";
 
 export default function ThankYouPage() {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+    <div className="min-h-[calc(100vh-64px-100px)] bg-zinc-50 flex items-center justify-center py-16">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-lg"
+        className="container mx-auto px-4 sm:px-8 lg:px-16 max-w-2xl"
       >
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-zinc-100">
           {/* Header Section */}

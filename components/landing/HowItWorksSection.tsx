@@ -50,7 +50,7 @@ export function HowItWorksSection() {
 
   return (
     <section className="py-24 bg-zinc-50 border-t border-zinc-200">
-      <div className="container">
+      <div className="container mx-auto px-4 sm:px-8 lg:px-16 xl:px-20 2xl:px-24">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

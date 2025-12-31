@@ -58,7 +58,7 @@ export default async function ApplyPage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50 py-12">
+    <div className="min-h-[calc(100vh-64px)] bg-zinc-50 py-16">
       <FormWizard product={product} />
     </div>
   );

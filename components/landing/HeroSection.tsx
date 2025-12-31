@@ -15,7 +15,7 @@ export function HeroSection() {
 
   return (
     <section className="relative overflow-hidden bg-brand-50 pt-32 pb-20 lg:pt-48 lg:pb-32 min-h-[80vh] flex items-center">
-      <div className="container relative z-30">
+      <div className="container mx-auto px-4 sm:px-8 lg:px-16 xl:px-20 2xl:px-24 relative z-30">
         <div className="mx-auto max-w-3xl text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

@@ -31,7 +31,7 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
           <Toaster richColors theme="light" />
           <footer className="py-12 bg-zinc-50 border-t border-zinc-200">
-            <div className="container">
+            <div className="container mx-auto px-4 sm:px-8 lg:px-16 xl:px-20 2xl:px-24">
               <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                 <div className="text-center md:text-left">
                   <p className="text-sm text-zinc-900 font-medium">

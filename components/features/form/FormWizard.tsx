@@ -82,9 +82,9 @@ export function FormWizard({ product }: FormWizardProps) {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto px-4 py-8 space-y-6">
+    <div className="container mx-auto px-4 sm:px-8 lg:px-16 max-w-3xl space-y-8">
       {/* Compact Product Context Card - Fixed Styling */}
-      <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+      <div className="bg-brand-50 border border-brand-100 rounded-lg p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
         <div>
           <p className="text-xs text-orange-600 font-medium uppercase tracking-wider">Pengajuan Untuk</p>
           <h3 className="font-bold text-gray-900 text-lg">{selectedProduct.name}</h3>

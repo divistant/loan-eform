@@ -51,6 +51,14 @@
   --color-brand-500: #D94E27;
   --color-brand-600: #B83D1B;
   --color-brand-900: #0F172A;
+  
+  /* Container Configuration for Tailwind v4 */
+  --container-center: true;
+  --container-padding: 1rem;
+  --container-padding-sm: 2rem;
+  --container-padding-lg: 4rem;
+  --container-padding-xl: 5rem;
+  --container-padding-2xl: 6rem;
 }
 
 :root {
