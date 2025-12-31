@@ -9,9 +9,9 @@ async function getProduct(id: string): Promise<Product | undefined> {
   const products: Array<Product> = [
     {
       id: "PROD-KPR",
-      name: "KPR Griya Jakarta",
+      name: "KPR - Kredit Pemilikan Rumah",
       rate: "4.5% eff.p.a",
-      description: "Wujudkan hunian impian keluarga Anda dengan suku bunga kompetitif 4.5% tetap selama 3 tahun. Proses mudah, transparan, dan tenor fleksibel hingga 25 tahun.",
+      description: "Solusi pembiayaan untuk memiliki rumah idaman dengan bunga kompetitif dan tenor panjang. Proses mudah dengan cicilan terjangkau hingga 25 tahun.",
       constraints: {
         min_income: 8000000,
         tenor_type: "YEAR",
@@ -19,10 +19,10 @@ async function getProduct(id: string): Promise<Product | undefined> {
       },
     },
     {
-      id: "PROD-KTA",
-      name: "Kredit Multiguna",
+      id: "PROD-KMG",
+      name: "KMG - Kredit Multi Guna",
       rate: "0.8% flat/bln",
-      description: "Solusi dana tunai cepat cair untuk renovasi rumah, pendidikan, atau kebutuhan mendesak lainnya. Tanpa agunan dengan persetujuan instan.",
+      description: "Pembiayaan fleksibel untuk berbagai kebutuhan seperti renovasi, pendidikan, atau keperluan mendesak lainnya. Proses cepat dengan suku bunga kompetitif.",
       constraints: {
         min_income: 3000000,
         tenor_type: "MONTH",
@@ -31,9 +31,9 @@ async function getProduct(id: string): Promise<Product | undefined> {
     },
     {
       id: "PROD-MIKRO",
-      name: "Kredit Usaha Mikro",
+      name: "Mikro - Kredit Usaha Mikro",
       rate: "0.5% flat/bln",
-      description: "Dukungan modal kerja untuk pengembangan usaha Anda. Bunga ringan dan persyaratan mudah untuk membantu UMKM naik kelas.",
+      description: "Pembiayaan modal usaha untuk pengembangan UMKM dengan bunga ringan dan persyaratan mudah. Dukung pertumbuhan bisnis Anda bersama Bank Jakarta.",
       constraints: {
         min_income: 2000000,
         tenor_type: "MONTH",

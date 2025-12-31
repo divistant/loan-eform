@@ -90,7 +90,7 @@ export function FormLayout({
       </div>
 
       {/* Content Container */}
-      <div className="bg-white p-6 md:p-8 rounded-xl shadow-sm border border-zinc-200 mt-12">
+      <div className="bg-white p-6 md:p-8 rounded-xl shadow-md border border-zinc-200 mt-12">
         <div className="mb-8 border-b border-zinc-100 pb-4">
           <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
           <p className="text-gray-600 mt-1">{description}</p>

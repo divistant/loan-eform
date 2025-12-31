@@ -4,9 +4,9 @@ import { type Product } from "@/types/domain";
 const products: Array<Product> = [
   {
     id: "PROD-KPR",
-    name: "KPR Griya Jakarta",
+    name: "KPR - Kredit Pemilikan Rumah",
     rate: "4.5% eff.p.a",
-    description: "Wujudkan hunian impian keluarga Anda dengan suku bunga tetap 4.5% selama 3 tahun. Cicilan ringan, proses cepat, dan tenor hingga 25 tahun.",
+    description: "Solusi pembiayaan untuk memiliki rumah idaman dengan bunga kompetitif dan tenor panjang. Proses mudah dengan cicilan terjangkau hingga 25 tahun.",
     constraints: {
       min_income: 8000000,
       tenor_type: "YEAR",
@@ -14,10 +14,10 @@ const products: Array<Product> = [
     },
   },
   {
-    id: "PROD-KTA",
-    name: "Kredit Multiguna",
+    id: "PROD-KMG",
+    name: "KMG - Kredit Multi Guna",
     rate: "0.8% flat/bln",
-    description: "Dana tunai cepat cair tanpa agunan untuk renovasi, pendidikan, atau kebutuhan mendesak. Proses persetujuan instan, langsung ke rekening Anda.",
+    description: "Pembiayaan fleksibel untuk berbagai kebutuhan seperti renovasi, pendidikan, atau keperluan mendesak lainnya. Proses cepat dengan suku bunga kompetitif.",
     constraints: {
       min_income: 3000000,
       tenor_type: "MONTH",
@@ -26,9 +26,9 @@ const products: Array<Product> = [
   },
   {
     id: "PROD-MIKRO",
-    name: "Kredit Usaha Mikro",
+    name: "Mikro - Kredit Usaha Mikro",
     rate: "0.5% flat/bln",
-    description: "Modal kerja untuk mengembangkan usaha Anda. Bunga ringan, syarat mudah, khusus UMKM yang ingin naik kelas dan ekspansi.",
+    description: "Pembiayaan modal usaha untuk pengembangan UMKM dengan bunga ringan dan persyaratan mudah. Dukung pertumbuhan bisnis Anda bersama Bank Jakarta.",
     constraints: {
       min_income: 2000000,
       tenor_type: "MONTH",

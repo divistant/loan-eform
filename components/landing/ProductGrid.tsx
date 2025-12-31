@@ -68,7 +68,7 @@ export function ProductGrid() {
           <p className="mt-4 text-lg text-zinc-600">
             Pilih produk pinjaman yang sesuai dengan tujuan dan kemampuan finansial Anda.
             <br className="hidden sm:block" />
-            Mulai dari KPR, dana tunai, hingga modal usaha.
+            Mulai dari Kredit Pemilikan Rumah, Kredit Multi Guna, hingga Kredit Usaha Mikro.
           </p>
         </motion.div>
         

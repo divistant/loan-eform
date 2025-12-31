@@ -91,7 +91,7 @@ export function FormWizard({ product }: FormWizardProps) {
           <p className="text-sm text-gray-600">{selectedProduct.description}</p>
         </div>
         <div className="text-right">
-          <p className="text-sm font-bold text-brand-500 bg-white px-3 py-1 rounded-full border border-orange-100 shadow-sm">
+          <p className="text-xs font-semibold text-brand-500 bg-white px-4 py-1.5 rounded-full border border-orange-100 shadow-sm inline-flex items-center whitespace-nowrap">
             {selectedProduct.rate}
           </p>
         </div>

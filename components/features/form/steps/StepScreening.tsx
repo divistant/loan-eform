@@ -135,7 +135,7 @@ export function StepScreening() {
                 defaultValue={field.value ? String(field.value) : undefined}
               >
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue placeholder="Pilih tenor" />
                   </SelectTrigger>
                 </FormControl>

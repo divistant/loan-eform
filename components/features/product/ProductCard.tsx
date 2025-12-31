@@ -38,7 +38,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
   const getProductIcon = (id: string) => {
     if (id.includes("KPR")) return <Home className="h-6 w-6 text-brand-500" />;
-    if (id.includes("KTA")) return <Banknote className="h-6 w-6 text-brand-500" />;
+    if (id.includes("KMG")) return <Banknote className="h-6 w-6 text-brand-500" />;
     return <Store className="h-6 w-6 text-brand-500" />;
   };
 
