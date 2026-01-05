@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, useCallback, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { Menu } from "lucide-react";
@@ -16,6 +17,8 @@ import {
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -52,15 +55,23 @@ export function Header() {
     };
   }, []);
 
-  // Desktop navigation handler (no delay needed)
+  // Desktop navigation handler with page detection
   const handleDesktopNavClick = useCallback((sectionId: string, e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (performScrollRef.current) {
-      performScrollRef.current(sectionId);
+    
+    // Check if we're on landing page
+    if (pathname === '/') {
+      // Di landing page, scroll langsung
+      if (performScrollRef.current) {
+        performScrollRef.current(sectionId);
+      }
+    } else {
+      // Di halaman lain, redirect ke landing page dengan hash
+      router.push(`/#${sectionId}`);
     }
-  }, []);
+  }, [pathname, router]);
 
-  // Mobile navigation handler (close Sheet first, then scroll)
+  // Mobile navigation handler with page detection
   const handleMobileNavClick = useCallback((sectionId: string, e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
@@ -68,13 +79,21 @@ export function Header() {
     // Close mobile menu first
     setIsMobileMenuOpen(false);
     
-    // Wait for Sheet to close before scrolling (Sheet animation takes ~300ms)
-    setTimeout(() => {
-      if (performScrollRef.current) {
-        performScrollRef.current(sectionId);
-      }
-    }, 400); // Slightly longer than Sheet close animation to ensure it's fully closed
-  }, []);
+    // Check if we're on landing page
+    if (pathname === '/') {
+      // Di landing page, wait for Sheet to close then scroll
+      setTimeout(() => {
+        if (performScrollRef.current) {
+          performScrollRef.current(sectionId);
+        }
+      }, 400); // Slightly longer than Sheet close animation to ensure it's fully closed
+    } else {
+      // Di halaman lain, redirect ke landing page dengan hash
+      setTimeout(() => {
+        router.push(`/#${sectionId}`);
+      }, 350); // Wait for Sheet to close first
+    }
+  }, [pathname, router]);
 
   return (
     <header
@@ -122,6 +141,12 @@ export function Header() {
           >
             Cara Kerja
           </button>
+          <Link
+            href="/tracking"
+            className="text-sm font-medium text-zinc-600 hover:text-brand-500 transition-colors px-2 py-1 rounded-md hover:bg-brand-50"
+          >
+            Cek Status
+          </Link>
           <a
             href="https://www.bankdki.co.id/home"
             target="_blank"
@@ -175,6 +200,12 @@ export function Header() {
               >
                 Cara Kerja
               </button>
+              <Link
+                href="/tracking"
+                className="text-left text-base font-medium text-zinc-700 hover:text-brand-500 transition-colors px-4 py-3 rounded-md hover:bg-brand-50"
+              >
+                Cek Status
+              </Link>
               <a
                 href="https://www.bankdki.co.id/home"
                 target="_blank"

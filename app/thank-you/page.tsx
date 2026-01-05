@@ -150,12 +150,26 @@ function ThankYouContent() {
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-4">
-                <Button className="w-full bg-brand-500 hover:bg-brand-600 text-white font-semibold h-11 transition-all duration-300" asChild>
-                  <Link href="/">
-                    Kembali ke Beranda
-                  </Link>
-                </Button>
+              <div className="pt-4 space-y-3">
+                {uuid && (
+                  <Button className="w-full bg-brand-500 hover:bg-brand-600 text-white font-semibold h-11 transition-all duration-300" asChild>
+                    <Link href={`/tracking/${uuid}`}>
+                      Lacak Status Pengajuan
+                    </Link>
+                  </Button>
+                )}
+                <div className="flex gap-3">
+                  <Button variant="outline" className="flex-1 h-11" asChild>
+                    <Link href="/tracking">
+                      Cek Status Lain
+                    </Link>
+                  </Button>
+                  <Button variant="outline" className="flex-1 h-11" asChild>
+                    <Link href="/">
+                      Kembali ke Beranda
+                    </Link>
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
