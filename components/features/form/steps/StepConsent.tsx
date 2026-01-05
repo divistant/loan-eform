@@ -16,12 +16,15 @@ import { Button } from "@/components/ui/button";
 import { useFormStore } from "@/lib/store/useFormStore";
 import { consentSchema, type ConsentFormValues } from "@/lib/validators/form-schema";
 import { toast } from "sonner";
-import { Loader2, ArrowRight, Edit2, User, Mail, Phone, CreditCard, DollarSign, Calendar } from "lucide-react";
+import { Loader2, ArrowRight, Edit2, User, Mail, Phone, CreditCard, DollarSign, Calendar, MapPin, Briefcase, Clock } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { submitLoanProspect } from "@/lib/api/loan-prospect-client";
+import { transformFormDataToAPI } from "@/lib/utils/api-transformer";
 
 export function StepConsent() {
-  const { draft, updateDraft, reset, selectedProduct, setStep } = useFormStore();
+  const { draft, updateDraft, reset, selectedProduct, setStep, verification } = useFormStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [lastError, setLastError] = useState<string | null>(null);
   const router = useRouter();
 
   const form = useForm<ConsentFormValues>({
@@ -48,34 +51,89 @@ export function StepConsent() {
     return `${nik.substring(0, 4)}${"*".repeat(8)}${nik.substring(12)}`;
   };
 
-  const onSubmit = async (data: ConsentFormValues) => {
-    updateDraft("consent", data.consent as any); // Type assertion needed due to boolean being primitive not object
-    setIsSubmitting(true);
+  const submitForm = async (data: ConsentFormValues) => {
+    if (!selectedProduct || !verification.phoneNumber) {
+      toast.error("Data tidak lengkap. Silakan lengkapi form terlebih dahulu.");
+      return;
+    }
 
-    // Prepare payload
-    const payload = {
-      ...draft,
-      consent: data.consent,
-      submittedAt: new Date().toISOString(),
-    };
+    updateDraft("consent", data.consent as any);
+    setIsSubmitting(true);
+    setLastError(null);
 
     try {
-      const res = await fetch("/api/mock/leads", {
-        method: "POST",
-        body: JSON.stringify(payload),
-      });
+      // Transform form data ke format API
+      const apiPayload = transformFormDataToAPI(
+        { ...draft, consent: data.consent },
+        selectedProduct,
+        verification.phoneNumber
+      );
 
-      if (res.ok) {
-        reset(); // Reset form store
-        router.push("/thank-you"); // Redirect to thank you page
+      // Submit ke API
+      console.log("📤 [CLIENT] Submitting loan prospect...");
+      console.log("📦 [CLIENT] Payload:", JSON.stringify(apiPayload, null, 2));
+      
+      const response = await submitLoanProspect(apiPayload);
+
+      console.log("📥 [CLIENT] API Response:", response);
+      console.log("🆔 [CLIENT] UUID:", response.data?.prpect_uuid);
+
+      // Cek apakah Mock atau Real API berdasarkan UUID format
+      if (response.data?.prpect_uuid?.startsWith("MOCK-")) {
+        console.log("🔵 [CLIENT] Menggunakan MOCK API");
       } else {
-        toast.error("Gagal mengirim pengajuan");
+        console.log("🟢 [CLIENT] Menggunakan REAL API");
       }
-    } catch {
-      toast.error("Terjadi kesalahan sistem");
+
+      // Success
+      if (response.data?.prpect_uuid) {
+        toast.success("Pengajuan berhasil dikirim!");
+        reset();
+        router.push(`/thank-you?uuid=${encodeURIComponent(response.data.prpect_uuid)}`);
+      } else {
+        toast.error("Pengajuan berhasil dikirim, namun tidak ada UUID yang diterima.");
+        reset();
+        router.push("/thank-you");
+      }
+    } catch (error: any) {
+      // Handle error responses
+      let errorMessage = "Terjadi kesalahan saat mengirim pengajuan. Silakan coba lagi.";
+
+      if (error.status === 400) {
+        errorMessage = error.userMessage || error.message || "Data yang dikirim tidak valid. Silakan periksa kembali.";
+      } else if (error.status === 401) {
+        errorMessage = "Autentikasi gagal. Silakan coba lagi.";
+      } else if (error.status === 403) {
+        errorMessage = "Akses ditolak. Silakan hubungi administrator.";
+      } else if (error.status === 404) {
+        errorMessage = "Endpoint tidak ditemukan.";
+      } else if (error.status === 409) {
+        errorMessage = "Data dengan NIK ini sudah terdaftar.";
+      } else if (error.status === 500) {
+        // Check if it's a configuration error
+        if (error.userMessage && error.userMessage.includes("tidak dikonfigurasi")) {
+          errorMessage = error.userMessage + " Lihat ENV_SETUP.md untuk panduan setup.";
+        } else {
+          errorMessage = "Terjadi kesalahan pada server. Silakan coba lagi nanti.";
+        }
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+
+      setLastError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const onSubmit = (data: ConsentFormValues) => {
+    submitForm(data);
+  };
+
+  const handleRetry = () => {
+    const currentData = form.getValues();
+    submitForm(currentData);
   };
 
   return (
@@ -125,7 +183,35 @@ export function StepConsent() {
               </div>
               <div className="flex-1">
                 <p className="text-xs text-gray-500 mb-0.5">Nomor WhatsApp</p>
-                <p className="text-sm font-medium text-gray-900">{useFormStore.getState().verification.phoneNumber || "-"}</p>
+                <p className="text-sm font-medium text-gray-900">{verification.phoneNumber || "-"}</p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <div className="mt-0.5">
+                <Calendar className="h-4 w-4 text-gray-400" />
+              </div>
+              <div className="flex-1">
+                <p className="text-xs text-gray-500 mb-0.5">Tanggal Lahir</p>
+                <p className="text-sm font-medium text-gray-900">
+                  {draft.personal.birthdate 
+                    ? new Date(draft.personal.birthdate).toLocaleDateString("id-ID", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric"
+                      })
+                    : "-"}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <div className="mt-0.5">
+                <MapPin className="h-4 w-4 text-gray-400" />
+              </div>
+              <div className="flex-1">
+                <p className="text-xs text-gray-500 mb-0.5">Alamat</p>
+                <p className="text-sm font-medium text-gray-900">{draft.personal.address || "-"}</p>
               </div>
             </div>
           </div>
@@ -174,6 +260,40 @@ export function StepConsent() {
                 </p>
               </div>
             </div>
+
+            <div className="flex items-start gap-3">
+              <div className="mt-0.5">
+                <Briefcase className="h-4 w-4 text-gray-400" />
+              </div>
+              <div className="flex-1">
+                <p className="text-xs text-gray-500 mb-0.5">Pekerjaan</p>
+                <p className="text-sm font-medium text-gray-900">{draft.screening.occupation || "-"}</p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <div className="mt-0.5">
+                <Clock className="h-4 w-4 text-gray-400" />
+              </div>
+              <div className="flex-1">
+                <p className="text-xs text-gray-500 mb-0.5">Lama Bekerja</p>
+                <p className="text-sm font-medium text-gray-900">
+                  {draft.screening.workDuration ? `${draft.screening.workDuration} Tahun` : "-"}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <div className="mt-0.5">
+                <DollarSign className="h-4 w-4 text-gray-400" />
+              </div>
+              <div className="flex-1">
+                <p className="text-xs text-gray-500 mb-0.5">Jumlah Pinjaman</p>
+                <p className="text-sm font-medium text-gray-900">
+                  {draft.screening.loanAmount ? formatRupiah(draft.screening.loanAmount) : "-"}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -206,34 +326,67 @@ export function StepConsent() {
                 <Checkbox
                   checked={Boolean(field.value)}
                   onCheckedChange={field.onChange}
+                  className="mt-0.5 shrink-0"
                 />
               </FormControl>
-              <div className="space-y-1 leading-none">
-                <FormLabel className="text-sm font-normal leading-relaxed">
-                  Saya menyetujui data saya diproses oleh Bank Jakarta sesuai dengan{" "}
+              <div className="flex-1 space-y-1">
+                <FormLabel className="text-sm font-normal leading-relaxed cursor-pointer flex flex-wrap items-center gap-x-1 gap-y-1">
+                  <span>Saya menyetujui data saya diproses oleh</span>
+                  <span>Bank Jakarta sesuai dengan</span>
                   <a 
                     href="https://www.bankdki.co.id/syarat-ketentuan" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-brand-500 font-medium underline hover:text-brand-600 transition-colors"
+                    className="text-brand-500 font-medium underline hover:text-brand-600 transition-colors inline-flex items-center"
+                    onClick={(e) => e.stopPropagation()}
                   >
                     Syarat & Ketentuan
-                  </a>{" "}
-                  dan{" "}
+                  </a>
+                  <span>dan</span>
                   <a 
                     href="https://www.bankdki.co.id/kebijakan-privasi" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-brand-500 font-medium underline hover:text-brand-600 transition-colors"
+                    className="text-brand-500 font-medium underline hover:text-brand-600 transition-colors inline-flex items-center"
+                    onClick={(e) => e.stopPropagation()}
                   >
                     Kebijakan Privasi
-                  </a>.
+                  </a>
+                  <span>.</span>
                 </FormLabel>
                 <FormMessage />
               </div>
             </FormItem>
           )}
         />
+
+        {lastError && (
+          <div className="rounded-lg border border-red-200 bg-red-50 p-4 mt-6">
+            <div className="flex items-start gap-3">
+              <div className="flex-1">
+                <p className="text-sm font-medium text-red-900 mb-1">Pengajuan Gagal</p>
+                <p className="text-sm text-red-700">{lastError}</p>
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleRetry}
+                disabled={isSubmitting}
+                className="shrink-0"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-3 w-3 animate-spin" />
+                    Mencoba...
+                  </>
+                ) : (
+                  "Coba Lagi"
+                )}
+              </Button>
+            </div>
+          </div>
+        )}
 
         <Button 
           type="submit" 

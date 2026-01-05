@@ -1,11 +1,27 @@
 "use client";
 
+import { Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, ArrowRight, Download, Clock, Mail, MessageSquare } from "lucide-react";
+import { CheckCircle, ArrowRight, Download, Clock, Mail, MessageSquare, Copy, Check } from "lucide-react";
 import { motion } from "framer-motion";
+import { useState } from "react";
+import { toast } from "sonner";
 
-export default function ThankYouPage() {
+function ThankYouContent() {
+  const searchParams = useSearchParams();
+  const uuid = searchParams.get("uuid");
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyUUID = () => {
+    if (uuid) {
+      navigator.clipboard.writeText(uuid);
+      setCopied(true);
+      toast.success("Nomor referensi berhasil disalin!");
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
   return (
     <div className="min-h-[calc(100vh-64px-100px)] bg-zinc-50 flex items-center justify-center py-16">
       <motion.div
@@ -36,6 +52,40 @@ export default function ThankYouPage() {
           {/* Body Section */}
           <div className="p-8">
             <div className="space-y-6">
+              {/* Reference Number */}
+              {uuid && (
+                <div className="bg-zinc-50 border border-zinc-200 rounded-lg p-4">
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="flex-1">
+                      <p className="text-xs text-gray-500 mb-1">Nomor Referensi Pengajuan</p>
+                      <p className="text-sm font-mono font-semibold text-gray-900 break-all">{uuid}</p>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={handleCopyUUID}
+                      className="shrink-0"
+                    >
+                      {copied ? (
+                        <>
+                          <Check className="h-3 w-3 mr-1" />
+                          Tersalin
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="h-3 w-3 mr-1" />
+                          Salin
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-2">
+                    Simpan nomor referensi ini untuk keperluan follow-up pengajuan Anda.
+                  </p>
+                </div>
+              )}
+
               <h2 className="text-lg font-semibold text-gray-900 border-b border-gray-100 pb-2">
                 Apa langkah selanjutnya?
               </h2>
@@ -112,6 +162,23 @@ export default function ThankYouPage() {
         </div>
       </motion.div>
     </div>
+  );
+}
+
+export default function ThankYouPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-[calc(100vh-64px-100px)] bg-zinc-50 flex items-center justify-center py-16">
+        <div className="text-center">
+          <div className="animate-pulse space-y-4">
+            <div className="h-8 bg-gray-200 rounded w-64 mx-auto"></div>
+            <div className="h-4 bg-gray-200 rounded w-48 mx-auto"></div>
+          </div>
+        </div>
+      </div>
+    }>
+      <ThankYouContent />
+    </Suspense>
   );
 }
 

@@ -41,12 +41,45 @@ export function StepScreening() {
     }).format(value);
   };
 
-  const form = useForm<ScreeningFormValues>({ // Typo fix: screeningSchema but used IdentityFormValues type previously? No, logic was correct, checking imports
-    resolver: zodResolver(screeningSchema),
+  // Dynamic validation untuk monthlyIncome dan loanAmount berdasarkan produk
+  const dynamicScreeningSchema = screeningSchema
+    .refine(
+      (data) => {
+        if (selectedProduct) {
+          // Validasi monthlyIncome harus >= min_income produk
+          return data.monthlyIncome >= selectedProduct.constraints.min_income;
+        }
+        return true;
+      },
+      {
+        message: `Penghasilan minimal untuk produk ini adalah ${formatRupiah(selectedProduct?.constraints.min_income || 0)} per bulan`,
+        path: ["monthlyIncome"],
+      }
+    )
+    .refine(
+      (data) => {
+        if (selectedProduct) {
+          // Minimal loan amount biasanya 10% dari annual income atau minimum tertentu
+          const minLoanAmount = Math.max(1000000, selectedProduct.constraints.min_income * 12 * 0.1);
+          return data.loanAmount >= minLoanAmount;
+        }
+        return true;
+      },
+      {
+        message: `Jumlah pinjaman minimal ${formatRupiah(Math.max(1000000, (selectedProduct?.constraints.min_income || 0) * 12 * 0.1))}`,
+        path: ["loanAmount"],
+      }
+    );
+
+  const form = useForm<ScreeningFormValues>({
+    resolver: zodResolver(dynamicScreeningSchema),
     defaultValues: {
       nik: draft.screening.nik,
       monthlyIncome: draft.screening.monthlyIncome,
       requestedTenor: draft.screening.requestedTenor,
+      occupation: draft.screening.occupation || "",
+      workDuration: draft.screening.workDuration || 0,
+      loanAmount: draft.screening.loanAmount || 0,
     },
   });
 
@@ -147,6 +180,70 @@ export function StepScreening() {
                   ))}
                 </SelectContent>
               </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="occupation"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Pekerjaan</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Contoh: Karyawan Swasta, Wiraswasta, PNS"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="workDuration"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Lama Bekerja (Tahun)</FormLabel>
+              <FormControl>
+                <NumericFormat
+                  customInput={Input}
+                  placeholder="0"
+                  allowNegative={false}
+                  decimalScale={0}
+                  value={field.value}
+                  onValueChange={(values) => {
+                    field.onChange(values.floatValue || 0);
+                  }}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="loanAmount"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Jumlah Pinjaman</FormLabel>
+              <FormControl>
+                <NumericFormat
+                  customInput={Input}
+                  prefix="Rp "
+                  thousandSeparator="."
+                  decimalSeparator=","
+                  placeholder="Rp 0"
+                  value={field.value}
+                  onValueChange={(values) => {
+                    field.onChange(values.floatValue || 0);
+                  }}
+                />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}

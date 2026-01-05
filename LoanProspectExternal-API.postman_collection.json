@@ -1,0 +1,440 @@
+{
+	"info": {
+		"_postman_id": "5882cb14-c0e0-4054-bde0-ccce4957ee1e",
+		"name": "LoanProspectExternal-API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1023265"
+	},
+	"item": [
+		{
+			"name": "Create new loan prospect data (External API)",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const timestamp = new Date().getTime().toString();",
+							"console.log(\"Generated timestamp:\", timestamp);",
+							"",
+							"// Client credentials (you can also use environment variables)",
+							"const clientPassword = \"20260103extScrt20260103\"; // or pm.environment.get(\"clientPassword\")",
+							"",
+							"// Generate HMAC-SHA256 signature",
+							"const signature = CryptoJS.HmacSHA256(timestamp, clientPassword).toString(CryptoJS.enc.Base64);",
+							"console.log(\"Generated signature:\", signature);",
+							"",
+							"// Set variables for use in headers",
+							"pm.globals.set(\"timestamp\", timestamp);",
+							"pm.globals.set(\"signature\", signature);",
+							"",
+							"// Optional: Set other variables",
+							"pm.globals.set(\"clientId\", \"1003\");"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-Access-Type",
+						"value": "external",
+						"type": "text"
+					},
+					{
+						"key": "X-TimeStamp",
+						"value": "{{timestamp}}",
+						"type": "text"
+					},
+					{
+						"key": "X-Signature",
+						"value": "{{signature}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"full_name\": \"Budi Santoso1\",\n  \"ind_id_no\": \"3201234567890001\",\n  \"ind_birthdate\": \"1998-05-21\",\n  \"ind_main_mobileph\": \"081234567890\",\n  \"bp_addr\": \"Jl. Merdeka No. 10\",\n  \"ind_occupt_onid\": \"Karyawan Swasta\",\n  \"ind_lama_kerja\": 3,\n  \"ind_salary\": 6000000,\n  \"loanprd_shortname\": \"Kredit Multiguna\",\n  \"lord_loan_amt\": 20000000,\n  \"lord_jml_angs\": 12\n}",
+					"options": {
+						"raw": {
+							"headerFamily": "json",
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/external/loanprospects",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"external",
+						"loanprospects"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Created",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer <token>",
+								"description": "Added as a part of security scheme: bearer"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"prpect_uuid\": \"eca8f6ae-4ef2-d541-930b-37fa79a500e3\",\n  \"prpect_channel_id\": 3508,\n  \"prpect_status\": \"string\",\n  \"prpect_bp_type\": \"string\",\n  \"prpect_bp_fullname\": \"string\",\n  \"prpect_bp_domkelid\": 8341,\n  \"prpect_lastassignee_person\": 5176,\n  \"prpect_lastassigned_date\": \"1950-09-23T15:44:02.341Z\",\n  \"prpect_created_date\": \"1999-12-28T10:26:44.992Z\",\n  \"prpect_lastfollup_date\": \"2012-06-29T05:40:10.533Z\",\n  \"prpect_lastfollup_methd\": 5151,\n  \"prpect_opport_status\": \"string\",\n  \"prpect_planfollup_date\": \"1970-10-16T14:57:37.242Z\",\n  \"prpect_dsbrs_mthd\": \"string\",\n  \"prpect_bank_acct_id\": 60,\n  \"prpect_assign_type\": \"string\",\n  \"prpect_assign_priority\": \"string\",\n  \"kec_name\": \"string\",\n  \"city_name\": \"string\",\n  \"kel_name\": \"string\",\n  \"bizpartner_fullname\": \"string\",\n  \"bizpartner_domicile_addr\": \"string\",\n  \"bizpartner_domicile_rt\": \"string\",\n  \"bizpartner_domicile_rw\": \"string\",\n  \"people_fullname\": \"string\",\n  \"mobile_phone\": \"string\",\n  \"lent_contact_name\": \"string\",\n  \"bizpartner_domicile_lat\": 9261.14359249132,\n  \"bizpartner_domicile_lon\": 3148.2404034753777,\n  \"bizpartner_uuid\": \"9f433038-18c4-c107-51b1-da8191404a88\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/external/loanprospects",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"external",
+								"loanprospects"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"timestamp\": \"1967-11-04T13:10:46.581Z\",\n  \"status\": 9602,\n  \"error\": \"string\",\n  \"message\": \"string\",\n  \"path\": \"string\",\n  \"ttlRecords\": 1800,\n  \"ttlPages\": 2875,\n  \"pageNo\": 6425,\n  \"pageRecords\": 504,\n  \"data\": {\n    \"prpect_uuid\": \"baf016ee-a219-b221-4f36-9473953b5b7b\",\n    \"prpect_channel_id\": 7733,\n    \"prpect_status\": \"string\",\n    \"prpect_bp_type\": \"string\",\n    \"prpect_bp_fullname\": \"string\",\n    \"prpect_bp_domkelid\": 3990,\n    \"prpect_lastassignee_person\": 8136,\n    \"prpect_lastassigned_date\": \"1970-02-17T15:18:11.655Z\",\n    \"prpect_created_date\": \"1965-05-20T15:40:22.018Z\",\n    \"prpect_lastfollup_date\": \"2023-06-27T13:47:26.195Z\",\n    \"prpect_lastfollup_methd\": 1461,\n    \"prpect_opport_status\": \"string\",\n    \"prpect_planfollup_date\": \"1967-05-10T07:44:16.935Z\",\n    \"prpect_dsbrs_mthd\": \"string\",\n    \"prpect_bank_acct_id\": 9769,\n    \"prpect_assign_type\": \"string\",\n    \"prpect_assign_priority\": \"string\",\n    \"kec_name\": \"string\",\n    \"city_name\": \"string\",\n    \"kel_name\": \"string\",\n    \"bizpartner_fullname\": \"string\",\n    \"bizpartner_domicile_addr\": \"string\",\n    \"bizpartner_domicile_rt\": \"string\",\n    \"bizpartner_domicile_rw\": \"string\",\n    \"people_fullname\": \"string\",\n    \"mobile_phone\": \"string\",\n    \"lent_contact_name\": \"string\",\n    \"bizpartner_domicile_lat\": 7773.296334660955,\n    \"bizpartner_domicile_lon\": 734.3808549327147,\n    \"bizpartner_uuid\": \"749e2229-d1d6-80fb-762a-9eb3c88b9125\"\n  }\n}"
+				},
+				{
+					"name": "Bad Request",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer <token>",
+								"description": "Added as a part of security scheme: bearer"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"prpect_uuid\": \"eca8f6ae-4ef2-d541-930b-37fa79a500e3\",\n  \"prpect_channel_id\": 3508,\n  \"prpect_status\": \"string\",\n  \"prpect_bp_type\": \"string\",\n  \"prpect_bp_fullname\": \"string\",\n  \"prpect_bp_domkelid\": 8341,\n  \"prpect_lastassignee_person\": 5176,\n  \"prpect_lastassigned_date\": \"1950-09-23T15:44:02.341Z\",\n  \"prpect_created_date\": \"1999-12-28T10:26:44.992Z\",\n  \"prpect_lastfollup_date\": \"2012-06-29T05:40:10.533Z\",\n  \"prpect_lastfollup_methd\": 5151,\n  \"prpect_opport_status\": \"string\",\n  \"prpect_planfollup_date\": \"1970-10-16T14:57:37.242Z\",\n  \"prpect_dsbrs_mthd\": \"string\",\n  \"prpect_bank_acct_id\": 60,\n  \"prpect_assign_type\": \"string\",\n  \"prpect_assign_priority\": \"string\",\n  \"kec_name\": \"string\",\n  \"city_name\": \"string\",\n  \"kel_name\": \"string\",\n  \"bizpartner_fullname\": \"string\",\n  \"bizpartner_domicile_addr\": \"string\",\n  \"bizpartner_domicile_rt\": \"string\",\n  \"bizpartner_domicile_rw\": \"string\",\n  \"people_fullname\": \"string\",\n  \"mobile_phone\": \"string\",\n  \"lent_contact_name\": \"string\",\n  \"bizpartner_domicile_lat\": 9261.14359249132,\n  \"bizpartner_domicile_lon\": 3148.2404034753777,\n  \"bizpartner_uuid\": \"9f433038-18c4-c107-51b1-da8191404a88\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/external/loanprospects",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"external",
+								"loanprospects"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"timestamp\": \"2012-11-03T21:54:38.014Z\",\n  \"status\": 8126,\n  \"error\": \"string\",\n  \"message\": \"string\",\n  \"path\": \"string\",\n  \"ttlRecords\": 8696,\n  \"ttlPages\": 862,\n  \"pageNo\": 9932,\n  \"pageRecords\": 9606\n}"
+				},
+				{
+					"name": "Unauthorized - Invalid signature",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer <token>",
+								"description": "Added as a part of security scheme: bearer"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"prpect_uuid\": \"eca8f6ae-4ef2-d541-930b-37fa79a500e3\",\n  \"prpect_channel_id\": 3508,\n  \"prpect_status\": \"string\",\n  \"prpect_bp_type\": \"string\",\n  \"prpect_bp_fullname\": \"string\",\n  \"prpect_bp_domkelid\": 8341,\n  \"prpect_lastassignee_person\": 5176,\n  \"prpect_lastassigned_date\": \"1950-09-23T15:44:02.341Z\",\n  \"prpect_created_date\": \"1999-12-28T10:26:44.992Z\",\n  \"prpect_lastfollup_date\": \"2012-06-29T05:40:10.533Z\",\n  \"prpect_lastfollup_methd\": 5151,\n  \"prpect_opport_status\": \"string\",\n  \"prpect_planfollup_date\": \"1970-10-16T14:57:37.242Z\",\n  \"prpect_dsbrs_mthd\": \"string\",\n  \"prpect_bank_acct_id\": 60,\n  \"prpect_assign_type\": \"string\",\n  \"prpect_assign_priority\": \"string\",\n  \"kec_name\": \"string\",\n  \"city_name\": \"string\",\n  \"kel_name\": \"string\",\n  \"bizpartner_fullname\": \"string\",\n  \"bizpartner_domicile_addr\": \"string\",\n  \"bizpartner_domicile_rt\": \"string\",\n  \"bizpartner_domicile_rw\": \"string\",\n  \"people_fullname\": \"string\",\n  \"mobile_phone\": \"string\",\n  \"lent_contact_name\": \"string\",\n  \"bizpartner_domicile_lat\": 9261.14359249132,\n  \"bizpartner_domicile_lon\": 3148.2404034753777,\n  \"bizpartner_uuid\": \"9f433038-18c4-c107-51b1-da8191404a88\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/external/loanprospects",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"external",
+								"loanprospects"
+							]
+						}
+					},
+					"status": "Unauthorized",
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"responseCode\": \"string\",\n  \"responseMessage\": \"string\"\n}"
+				},
+				{
+					"name": "Forbidden",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer <token>",
+								"description": "Added as a part of security scheme: bearer"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"prpect_uuid\": \"eca8f6ae-4ef2-d541-930b-37fa79a500e3\",\n  \"prpect_channel_id\": 3508,\n  \"prpect_status\": \"string\",\n  \"prpect_bp_type\": \"string\",\n  \"prpect_bp_fullname\": \"string\",\n  \"prpect_bp_domkelid\": 8341,\n  \"prpect_lastassignee_person\": 5176,\n  \"prpect_lastassigned_date\": \"1950-09-23T15:44:02.341Z\",\n  \"prpect_created_date\": \"1999-12-28T10:26:44.992Z\",\n  \"prpect_lastfollup_date\": \"2012-06-29T05:40:10.533Z\",\n  \"prpect_lastfollup_methd\": 5151,\n  \"prpect_opport_status\": \"string\",\n  \"prpect_planfollup_date\": \"1970-10-16T14:57:37.242Z\",\n  \"prpect_dsbrs_mthd\": \"string\",\n  \"prpect_bank_acct_id\": 60,\n  \"prpect_assign_type\": \"string\",\n  \"prpect_assign_priority\": \"string\",\n  \"kec_name\": \"string\",\n  \"city_name\": \"string\",\n  \"kel_name\": \"string\",\n  \"bizpartner_fullname\": \"string\",\n  \"bizpartner_domicile_addr\": \"string\",\n  \"bizpartner_domicile_rt\": \"string\",\n  \"bizpartner_domicile_rw\": \"string\",\n  \"people_fullname\": \"string\",\n  \"mobile_phone\": \"string\",\n  \"lent_contact_name\": \"string\",\n  \"bizpartner_domicile_lat\": 9261.14359249132,\n  \"bizpartner_domicile_lon\": 3148.2404034753777,\n  \"bizpartner_uuid\": \"9f433038-18c4-c107-51b1-da8191404a88\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/external/loanprospects",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"external",
+								"loanprospects"
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"timestamp\": \"2012-11-03T21:54:38.014Z\",\n  \"status\": 8126,\n  \"error\": \"string\",\n  \"message\": \"string\",\n  \"path\": \"string\",\n  \"ttlRecords\": 8696,\n  \"ttlPages\": 862,\n  \"pageNo\": 9932,\n  \"pageRecords\": 9606\n}"
+				},
+				{
+					"name": "Not Found",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer <token>",
+								"description": "Added as a part of security scheme: bearer"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"prpect_uuid\": \"eca8f6ae-4ef2-d541-930b-37fa79a500e3\",\n  \"prpect_channel_id\": 3508,\n  \"prpect_status\": \"string\",\n  \"prpect_bp_type\": \"string\",\n  \"prpect_bp_fullname\": \"string\",\n  \"prpect_bp_domkelid\": 8341,\n  \"prpect_lastassignee_person\": 5176,\n  \"prpect_lastassigned_date\": \"1950-09-23T15:44:02.341Z\",\n  \"prpect_created_date\": \"1999-12-28T10:26:44.992Z\",\n  \"prpect_lastfollup_date\": \"2012-06-29T05:40:10.533Z\",\n  \"prpect_lastfollup_methd\": 5151,\n  \"prpect_opport_status\": \"string\",\n  \"prpect_planfollup_date\": \"1970-10-16T14:57:37.242Z\",\n  \"prpect_dsbrs_mthd\": \"string\",\n  \"prpect_bank_acct_id\": 60,\n  \"prpect_assign_type\": \"string\",\n  \"prpect_assign_priority\": \"string\",\n  \"kec_name\": \"string\",\n  \"city_name\": \"string\",\n  \"kel_name\": \"string\",\n  \"bizpartner_fullname\": \"string\",\n  \"bizpartner_domicile_addr\": \"string\",\n  \"bizpartner_domicile_rt\": \"string\",\n  \"bizpartner_domicile_rw\": \"string\",\n  \"people_fullname\": \"string\",\n  \"mobile_phone\": \"string\",\n  \"lent_contact_name\": \"string\",\n  \"bizpartner_domicile_lat\": 9261.14359249132,\n  \"bizpartner_domicile_lon\": 3148.2404034753777,\n  \"bizpartner_uuid\": \"9f433038-18c4-c107-51b1-da8191404a88\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/external/loanprospects",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"external",
+								"loanprospects"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"responseCode\": \"string\",\n  \"responseMessage\": \"string\"\n}"
+				},
+				{
+					"name": "Internal Server Error",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer <token>",
+								"description": "Added as a part of security scheme: bearer"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"prpect_uuid\": \"eca8f6ae-4ef2-d541-930b-37fa79a500e3\",\n  \"prpect_channel_id\": 3508,\n  \"prpect_status\": \"string\",\n  \"prpect_bp_type\": \"string\",\n  \"prpect_bp_fullname\": \"string\",\n  \"prpect_bp_domkelid\": 8341,\n  \"prpect_lastassignee_person\": 5176,\n  \"prpect_lastassigned_date\": \"1950-09-23T15:44:02.341Z\",\n  \"prpect_created_date\": \"1999-12-28T10:26:44.992Z\",\n  \"prpect_lastfollup_date\": \"2012-06-29T05:40:10.533Z\",\n  \"prpect_lastfollup_methd\": 5151,\n  \"prpect_opport_status\": \"string\",\n  \"prpect_planfollup_date\": \"1970-10-16T14:57:37.242Z\",\n  \"prpect_dsbrs_mthd\": \"string\",\n  \"prpect_bank_acct_id\": 60,\n  \"prpect_assign_type\": \"string\",\n  \"prpect_assign_priority\": \"string\",\n  \"kec_name\": \"string\",\n  \"city_name\": \"string\",\n  \"kel_name\": \"string\",\n  \"bizpartner_fullname\": \"string\",\n  \"bizpartner_domicile_addr\": \"string\",\n  \"bizpartner_domicile_rt\": \"string\",\n  \"bizpartner_domicile_rw\": \"string\",\n  \"people_fullname\": \"string\",\n  \"mobile_phone\": \"string\",\n  \"lent_contact_name\": \"string\",\n  \"bizpartner_domicile_lat\": 9261.14359249132,\n  \"bizpartner_domicile_lon\": 3148.2404034753777,\n  \"bizpartner_uuid\": \"9f433038-18c4-c107-51b1-da8191404a88\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/external/loanprospects",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"external",
+								"loanprospects"
+							]
+						}
+					},
+					"status": "Internal Server Error",
+					"code": 500,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"timestamp\": \"2012-11-03T21:54:38.014Z\",\n  \"status\": 8126,\n  \"error\": \"string\",\n  \"message\": \"string\",\n  \"path\": \"string\",\n  \"ttlRecords\": 8696,\n  \"ttlPages\": 862,\n  \"pageNo\": 9932,\n  \"pageRecords\": 9606\n}"
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": ""
+		}
+	]
+}

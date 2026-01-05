@@ -120,10 +120,10 @@ bank-jakarta-eform/
 
 Tidak ada environment variables yang required untuk menjalankan aplikasi ini karena menggunakan mock API. 
 
-Jika Anda ingin mengintegrasikan dengan API eksternal di masa depan, Anda bisa menambahkan:
+Jika Anda ingin mengintegrasikan dengan API eksternal, Anda bisa menambahkan:
 
 ```env
-NEXT_PUBLIC_API_BASE_URL=https://your-api-url.com
+NEXT_PUBLIC_API_BASE_URL=http://149.129.194.51:9200/fincoreplus-mblbackend
 ```
 
 ## 🎨 Customization

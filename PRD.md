@@ -75,9 +75,15 @@ Halaman depan harus mencerminkan nuansa "Digital Banking" yang bersih.
   * **Headline:** "Wujudkan Rencana, Membangun Masa Depan."  
   * **Sub-headline:** "Ajukan pinjaman mudah dan cepat melalui E-Form Bank Jakarta."  
   * **Visual:** Gunakan ilustrasi profesional (orang memegang gadget/laptop) yang senada dengan *imagery* website eksisting.  
+* **Credit Simulator Section:**  
+  * Section interaktif untuk simulasi kredit sebelum melihat produk.  
+  * User dapat memilih produk, input jumlah pinjaman dan tenor, lalu melihat estimasi cicilan secara real-time.  
+  * Menampilkan breakdown cicilan, total bunga, dan total pembayaran.  
+  * Layout user-friendly dengan visual feedback yang jelas.  
 * **Product Grid:**  
-  * Menampilkan Card Produk (KPR, KTA, Mikro).  
-  * Setiap Card memiliki aksen border atas berwarna Orange \#D94E27.
+  * Menampilkan Card Produk (KPR, KMG, Mikro).  
+  * Setiap Card memiliki aksen border atas berwarna Orange \#D94E27.  
+  * Setiap Card memiliki button "Coba Simulasi" yang membuka modal simulator untuk quick preview.
 
 ### **Flow 2: Lead Capture & Verification (The Hook)**
 
@@ -152,6 +158,38 @@ JSON
 * Payload: Profile \+ Screening Data.  
 * Response: 200 OK (Success) atau 409 Conflict (Duplicate).
 
+### **D. Credit Simulator Feature**
+
+* **Placement Strategy (Hybrid Approach):**
+  * **Quick Simulator Modal:** Button "Coba Simulasi" di setiap ProductCard yang membuka modal dengan simulator sederhana untuk quick preview.
+  * **Dedicated Simulator Section:** Section lengkap di landing page sebelum ProductGrid untuk detailed exploration.
+
+* **Calculation Logic:**
+  * **KPR (Effective Rate - Annuity):**
+    * Formula: `PMT = P × [r(1+r)^n] / [(1+r)^n - 1]`
+    * r = effective rate per bulan (4.5% p.a / 12)
+    * n = tenor dalam bulan (tenor tahun × 12)
+  * **KMG (Flat Rate):**
+    * Formula: `Monthly Payment = (Principal / Tenor) + (Principal × Flat Rate)`
+    * Flat Rate = 0.8% per bulan
+  * **Mikro (Flat Rate):**
+    * Formula: `Monthly Payment = (Principal / Tenor) + (Principal × Flat Rate)`
+    * Flat Rate = 0.5% per bulan
+
+* **Features:**
+  * Real-time calculation dengan debouncing (300ms)
+  * Input validation (min/max amounts, tenor validation)
+  * Visual breakdown untuk 12 bulan pertama
+  * Responsive design untuk mobile dan desktop
+  * Smooth animations dengan framer-motion
+
+* **Product Data Enhancement:**
+  * Setiap produk memiliki `calculation` object dengan:
+    * `type`: "EFFECTIVE" atau "FLAT"
+    * `rate`: Annual rate untuk EFFECTIVE, monthly rate untuk FLAT
+    * `min_amount`: Minimum loan amount
+    * `max_amount`: Maximum loan amount
+
 ---
 
 ## **7\. Development Roadmap & Deployment Strategy**
@@ -179,3 +217,49 @@ JSON
 
 * **Deployment:** Deploy ke Vercel (Preview Mode).  
 * **Demo Preparation:** Pastikan QR Code generate link Vercel agar stakeholder bisa scan dan coba di HP.
+
+### **Phase 5: Credit Simulator Feature (Enhancement)**
+
+* **Core Calculation Engine:**
+  * Implement calculation functions untuk KPR (effective rate), KMG dan Mikro (flat rate).
+  * Add input validation dan error handling.
+
+* **Simulator Components:**
+  * Build CreditSimulator component dengan real-time calculation.
+  * Build SimulatorInput dan SimulatorResult components.
+  * Add debouncing untuk performance optimization.
+
+* **Modal Integration:**
+  * Create SimulatorModal untuk quick preview dari ProductCard.
+  * Update ProductCard dengan button "Coba Simulasi".
+
+* **Landing Page Section:**
+  * Create SimulatorSection untuk full-featured simulator.
+  * Integrate dengan landing page layout.
+
+* **Product Data Update:**
+  * Add calculation parameters ke Product type.
+  * Update mock product data dengan calculation config.
+
+### **Phase 5: Credit Simulator Feature (Enhancement)**
+
+* **Core Calculation Engine:**
+  * Implement calculation functions untuk KPR (effective rate), KMG dan Mikro (flat rate).
+  * Add input validation dan error handling.
+
+* **Simulator Components:**
+  * Build CreditSimulator component dengan real-time calculation.
+  * Build SimulatorInput dan SimulatorResult components.
+  * Add debouncing untuk performance optimization.
+
+* **Modal Integration:**
+  * Create SimulatorModal untuk quick preview dari ProductCard.
+  * Update ProductCard dengan button "Coba Simulasi".
+
+* **Landing Page Section:**
+  * Create SimulatorSection untuk full-featured simulator.
+  * Integrate dengan landing page layout.
+
+* **Product Data Update:**
+  * Add calculation parameters ke Product type.
+  * Update mock product data dengan calculation config.

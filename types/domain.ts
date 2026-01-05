@@ -8,6 +8,27 @@ export type Product = {
     tenor_type: 'MONTH' | 'YEAR';
     tenor_options: Array<number>;
   };
+  calculation?: {
+    type: 'EFFECTIVE' | 'FLAT';
+    rate: number; // Annual rate untuk EFFECTIVE, monthly rate untuk FLAT
+    min_amount: number;
+    max_amount: number;
+  };
+  simulatorConfig?: {
+    fields: {
+      required: Array<'loanAmount' | 'tenor'>;
+      kpr?: Array<'purpose' | 'collateralType' | 'downPayment' | 'housePrice'>;
+      kmg?: Array<'loanPurpose'>;
+      mikro?: Array<'businessType'>;
+    };
+    options?: {
+      purpose?: Array<{ value: string; label: string }>;
+      collateralType?: Array<{ value: string; label: string }>;
+      downPayment?: Array<{ value: number; label: string }>;
+      loanPurpose?: Array<{ value: string; label: string }>;
+      businessType?: Array<{ value: string; label: string }>;
+    };
+  };
 };
 
 export type VerificationStatus = {
@@ -20,11 +41,16 @@ export type ApplicationDraft = {
   personal: {
     fullName: string;
     email: string;
+    birthdate: string;
+    address: string;
   };
   screening: {
     nik: string;
     monthlyIncome: number;
     requestedTenor: number;
+    occupation: string;
+    workDuration: number;
+    loanAmount: number;
   };
   consent: boolean;
 };

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,9 +11,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Check, ChevronRight, Home, Banknote, Store } from "lucide-react";
+import { Check, ChevronRight, Home, Banknote, Store, Calculator } from "lucide-react";
 import type { Product } from "@/types/domain";
 import { useFormStore } from "@/lib/store/useFormStore";
+import { SimulatorModal } from "@/components/features/simulator/SimulatorModal";
 
 type ProductCardProps = {
   product: Product;
@@ -21,6 +23,7 @@ type ProductCardProps = {
 export function ProductCard({ product }: ProductCardProps) {
   const router = useRouter();
   const setProduct = useFormStore((state) => state.setProduct);
+  const [isSimulatorOpen, setIsSimulatorOpen] = useState(false);
 
   // Helper untuk format rupiah
   const formatRupiah = (value: number) => {
@@ -44,11 +47,26 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <Card 
-      onClick={handleSelectProduct}
+      onClick={(e) => {
+        // Prevent card click jika modal sedang terbuka
+        // Also check if click target is from dialog overlay
+        const target = e.target as HTMLElement;
+        const isDialogOverlay = target.closest('[data-slot="dialog-overlay"]') || 
+                                 target.closest('[data-slot="dialog-content"]');
+        
+        if (!isSimulatorOpen && !isDialogOverlay) {
+          handleSelectProduct();
+        } else {
+          // Prevent navigation if modal is open or clicking on dialog
+          e.stopPropagation();
+        }
+      }}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          handleSelectProduct();
+          if (!isSimulatorOpen) {
+            handleSelectProduct();
+          }
         }
       }}
       tabIndex={0}
@@ -89,9 +107,20 @@ export function ProductCard({ product }: ProductCardProps) {
           </div>
         </div>
       </CardContent>
-      <CardFooter className="pt-2">
+      <CardFooter className="pt-2 flex flex-col gap-2">
         <Button 
-          className="w-full bg-brand-500 hover:bg-brand-600 text-white font-semibold shadow-md hover:shadow-xl group-hover:scale-105 transition-all duration-300 h-11 mt-4"
+          variant="outline"
+          className="w-full border-brand-300 text-brand-600 hover:bg-brand-50 hover:border-brand-400 font-medium transition-all duration-300 h-10"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsSimulatorOpen(true);
+          }}
+        >
+          <Calculator className="mr-2 h-4 w-4" />
+          Coba Simulasi
+        </Button>
+        <Button 
+          className="w-full bg-brand-500 hover:bg-brand-600 text-white font-semibold shadow-md hover:shadow-xl group-hover:scale-105 transition-all duration-300 h-11"
           onClick={(e) => {
             e.stopPropagation(); // Mencegah double trigger jika card diklik
             handleSelectProduct();
@@ -101,6 +130,11 @@ export function ProductCard({ product }: ProductCardProps) {
           <ChevronRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
         </Button>
       </CardFooter>
+      <SimulatorModal
+        product={product}
+        open={isSimulatorOpen}
+        onOpenChange={setIsSimulatorOpen}
+      />
     </Card>
   );
 }

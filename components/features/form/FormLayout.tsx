@@ -1,8 +1,10 @@
 "use client";
 
-import { Check } from "lucide-react";
+import { Check, ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import React from "react";
+import { Button } from "@/components/ui/button";
+import { useFormStore } from "@/lib/store/useFormStore";
 
 type Step = {
   id: number;
@@ -92,11 +94,38 @@ export function FormLayout({
       {/* Content Container */}
       <div className="bg-white p-6 md:p-8 rounded-xl shadow-md border border-zinc-200 mt-12">
         <div className="mb-8 border-b border-zinc-100 pb-4">
-          <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
-          <p className="text-gray-600 mt-1">{description}</p>
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex-1">
+              <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
+              <p className="text-gray-600 mt-1">{description}</p>
+            </div>
+            {currentStep > 0 && (
+              <BackButton />
+            )}
+          </div>
         </div>
         {children}
       </div>
     </div>
+  );
+}
+
+function BackButton() {
+  const { prevStep, currentStep } = useFormStore();
+
+  const handleBack = () => {
+    prevStep();
+  };
+
+  return (
+    <Button
+      type="button"
+      variant="outline"
+      onClick={handleBack}
+      className="flex items-center gap-2 shrink-0"
+    >
+      <ArrowLeft className="h-4 w-4" />
+      <span className="hidden sm:inline">Kembali</span>
+    </Button>
   );
 }

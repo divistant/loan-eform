@@ -7,6 +7,17 @@ export const identitySchema = z.object({
     .string()
     .min(10, "Nomor HP minimal 10 digit")
     .regex(/^(08|628)\d+$/, "Nomor HP harus diawali 08 atau 628"),
+  birthdate: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Format tanggal harus YYYY-MM-DD")
+    .refine((date) => {
+      const parsed = new Date(date);
+      const today = new Date();
+      const minAge = new Date();
+      minAge.setFullYear(today.getFullYear() - 100);
+      return parsed <= today && parsed >= minAge;
+    }, "Tanggal lahir tidak valid"),
+  address: z.string().min(10, "Alamat minimal 10 karakter"),
 });
 
 export const otpSchema = z.object({
@@ -20,6 +31,9 @@ export const screeningSchema = z.object({
     .regex(/^\d+$/, "NIK harus berupa angka"),
   monthlyIncome: z.number().min(0, "Penghasilan tidak boleh negatif"), // Validasi minimum tergantung produk nanti
   requestedTenor: z.number().min(1, "Tenor harus dipilih"),
+  occupation: z.string().min(2, "Pekerjaan minimal 2 karakter"),
+  workDuration: z.number().min(0, "Lama kerja tidak boleh negatif").max(50, "Lama kerja maksimal 50 tahun"),
+  loanAmount: z.number().min(1000000, "Jumlah pinjaman minimal Rp 1.000.000"),
 });
 
 export const consentSchema = z.object({

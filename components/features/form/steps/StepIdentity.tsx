@@ -12,6 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useFormStore } from "@/lib/store/useFormStore";
 import { identitySchema, type IdentityFormValues } from "@/lib/validators/form-schema";
@@ -27,6 +28,8 @@ export function StepIdentity() {
       fullName: draft.personal.fullName,
       email: draft.personal.email,
       phoneNumber: verification.phoneNumber || "",
+      birthdate: draft.personal.birthdate || "",
+      address: draft.personal.address || "",
     },
   });
 
@@ -37,6 +40,8 @@ export function StepIdentity() {
     updateDraft("personal", {
       fullName: data.fullName,
       email: data.email,
+      birthdate: data.birthdate,
+      address: data.address,
     });
     
     setVerificationStatus("IDLE", data.phoneNumber);
@@ -91,6 +96,43 @@ export function StepIdentity() {
                     const value = e.target.value.replace(/\D/g, "");
                     field.onChange(value);
                   }}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="birthdate"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Tanggal Lahir</FormLabel>
+              <FormControl>
+                <Input
+                  type="date"
+                  placeholder="YYYY-MM-DD"
+                  max={new Date().toISOString().split("T")[0]}
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="address"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Alamat Lengkap</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Jl. Contoh No. 123, RT/RW, Kelurahan, Kecamatan, Kota"
+                  rows={3}
+                  {...field}
                 />
               </FormControl>
               <FormMessage />

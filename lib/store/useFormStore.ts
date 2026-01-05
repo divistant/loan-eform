@@ -35,11 +35,16 @@ const initialState: State = {
     personal: {
       fullName: "",
       email: "",
+      birthdate: "",
+      address: "",
     },
     screening: {
       nik: "",
       monthlyIncome: 0,
       requestedTenor: 0,
+      occupation: "",
+      workDuration: 0,
+      loanAmount: 0,
     },
     consent: false,
   },

@@ -2,12 +2,20 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { cn } from "@/lib/utils";
-import { toast } from "sonner";
+import { Menu } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,18 +26,55 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleServiceClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    toast.info("Fitur layanan digital akan segera hadir.");
-  };
+  // Improved scroll function with retry mechanism
+  const performScrollRef = useRef<((sectionId: string, retryCount?: number) => void) | null>(null);
+  
+  useEffect(() => {
+    performScrollRef.current = (sectionId: string, retryCount = 0) => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        const headerOffset = 80; // Account for sticky header
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
-  const scrollToProducts = (e: React.MouseEvent) => {
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      } else if (retryCount < 3) {
+        // Retry if element not found (might still be rendering)
+        setTimeout(() => {
+          if (performScrollRef.current) {
+            performScrollRef.current(sectionId, retryCount + 1);
+          }
+        }, 100);
+      }
+    };
+  }, []);
+
+  // Desktop navigation handler (no delay needed)
+  const handleDesktopNavClick = useCallback((sectionId: string, e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const element = document.getElementById('products');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+    if (performScrollRef.current) {
+      performScrollRef.current(sectionId);
     }
-  };
+  }, []);
+
+  // Mobile navigation handler (close Sheet first, then scroll)
+  const handleMobileNavClick = useCallback((sectionId: string, e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Close mobile menu first
+    setIsMobileMenuOpen(false);
+    
+    // Wait for Sheet to close before scrolling (Sheet animation takes ~300ms)
+    setTimeout(() => {
+      if (performScrollRef.current) {
+        performScrollRef.current(sectionId);
+      }
+    }, 400); // Slightly longer than Sheet close animation to ensure it's fully closed
+  }, []);
 
   return (
     <header
@@ -52,30 +97,95 @@ export function Header() {
           />
         </Link>
 
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden md:flex items-center gap-6">
           <button
-            onClick={scrollToProducts}
-            className="text-sm font-medium text-zinc-600 hover:text-brand-500 transition-colors cursor-pointer"
+            onClick={(e) => handleDesktopNavClick('simulator', e)}
+            className="text-sm font-medium text-zinc-600 hover:text-brand-500 transition-colors cursor-pointer px-2 py-1 rounded-md hover:bg-brand-50"
+          >
+            Simulator
+          </button>
+          <button
+            onClick={(e) => handleDesktopNavClick('products', e)}
+            className="text-sm font-medium text-zinc-600 hover:text-brand-500 transition-colors cursor-pointer px-2 py-1 rounded-md hover:bg-brand-50"
           >
             Produk
           </button>
           <button
-            onClick={handleServiceClick}
-            className="text-sm font-medium text-zinc-600 hover:text-brand-500 transition-colors cursor-pointer"
+            onClick={(e) => handleDesktopNavClick('benefits', e)}
+            className="text-sm font-medium text-zinc-600 hover:text-brand-500 transition-colors cursor-pointer px-2 py-1 rounded-md hover:bg-brand-50"
           >
-            Layanan
+            Keuntungan
+          </button>
+          <button
+            onClick={(e) => handleDesktopNavClick('cara-kerja', e)}
+            className="text-sm font-medium text-zinc-600 hover:text-brand-500 transition-colors cursor-pointer px-2 py-1 rounded-md hover:bg-brand-50"
+          >
+            Cara Kerja
           </button>
           <a
             href="https://www.bankdki.co.id/home"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm font-medium text-zinc-600 hover:text-brand-500 transition-colors"
+            className="text-sm font-medium text-zinc-600 hover:text-brand-500 transition-colors px-2 py-1 rounded-md hover:bg-brand-50"
           >
             Tentang Kami
           </a>
         </nav>
 
-        {/* Mobile Menu Placeholder - Bisa ditambahkan hamburger menu nanti */}
+        {/* Mobile Menu */}
+        <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+          <SheetTrigger asChild>
+            <button
+              className="md:hidden p-2 rounded-md hover:bg-gray-100 transition-colors"
+              aria-label="Toggle menu"
+            >
+              <Menu className="h-6 w-6 text-gray-700" />
+            </button>
+          </SheetTrigger>
+          <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+            <SheetHeader>
+              <SheetTitle className="text-left">Menu</SheetTitle>
+            </SheetHeader>
+            <nav className="mt-8 flex flex-col gap-2">
+              <button
+                onClick={(e) => handleMobileNavClick('simulator', e)}
+                type="button"
+                className="text-left text-base font-medium text-zinc-700 hover:text-brand-500 transition-colors cursor-pointer px-4 py-3 rounded-md hover:bg-brand-50"
+              >
+                Simulator
+              </button>
+              <button
+                onClick={(e) => handleMobileNavClick('products', e)}
+                type="button"
+                className="text-left text-base font-medium text-zinc-700 hover:text-brand-500 transition-colors cursor-pointer px-4 py-3 rounded-md hover:bg-brand-50"
+              >
+                Produk
+              </button>
+              <button
+                onClick={(e) => handleMobileNavClick('benefits', e)}
+                type="button"
+                className="text-left text-base font-medium text-zinc-700 hover:text-brand-500 transition-colors cursor-pointer px-4 py-3 rounded-md hover:bg-brand-50"
+              >
+                Keuntungan
+              </button>
+              <button
+                onClick={(e) => handleMobileNavClick('cara-kerja', e)}
+                type="button"
+                className="text-left text-base font-medium text-zinc-700 hover:text-brand-500 transition-colors cursor-pointer px-4 py-3 rounded-md hover:bg-brand-50"
+              >
+                Cara Kerja
+              </button>
+              <a
+                href="https://www.bankdki.co.id/home"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-left text-base font-medium text-zinc-700 hover:text-brand-500 transition-colors px-4 py-3 rounded-md hover:bg-brand-50"
+              >
+                Tentang Kami
+              </a>
+            </nav>
+          </SheetContent>
+        </Sheet>
       </div>
     </header>
   );

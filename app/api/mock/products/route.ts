@@ -12,6 +12,39 @@ const products: Array<Product> = [
       tenor_type: "YEAR",
       tenor_options: [5, 10, 15, 20, 25],
     },
+    calculation: {
+      type: "EFFECTIVE",
+      rate: 4.5, // Annual rate 4.5%
+      min_amount: 50000000, // 50 juta
+      max_amount: 5000000000, // 5 milyar
+    },
+    simulatorConfig: {
+      fields: {
+        required: ["loanAmount", "tenor"],
+        kpr: ["purpose", "collateralType", "downPayment", "housePrice"],
+      },
+      options: {
+        purpose: [
+          { value: "beli-baru", label: "Beli Rumah Baru" },
+          { value: "beli-bekas", label: "Beli Rumah Bekas" },
+          { value: "renovasi", label: "Renovasi Rumah" },
+          { value: "refinancing", label: "Refinancing" },
+        ],
+        collateralType: [
+          { value: "shm", label: "Sertifikat Hak Milik (SHM)" },
+          { value: "shgb", label: "Sertifikat Hak Guna Bangunan (SHGB)" },
+          { value: "girik", label: "Girik / Petok D" },
+          { value: "ajb", label: "Akta Jual Beli (AJB)" },
+        ],
+        downPayment: [
+          { value: 10, label: "10%" },
+          { value: 15, label: "15%" },
+          { value: 20, label: "20%" },
+          { value: 25, label: "25%" },
+          { value: 30, label: "30%" },
+        ],
+      },
+    },
   },
   {
     id: "PROD-KMG",
@@ -23,6 +56,28 @@ const products: Array<Product> = [
       tenor_type: "MONTH",
       tenor_options: [12, 24, 36, 48, 60],
     },
+    calculation: {
+      type: "FLAT",
+      rate: 0.8, // Monthly flat rate 0.8%
+      min_amount: 10000000, // 10 juta
+      max_amount: 500000000, // 500 juta
+    },
+    simulatorConfig: {
+      fields: {
+        required: ["loanAmount", "tenor"],
+        kmg: ["loanPurpose"],
+      },
+      options: {
+        loanPurpose: [
+          { value: "renovasi", label: "Renovasi Rumah" },
+          { value: "pendidikan", label: "Pendidikan" },
+          { value: "kesehatan", label: "Kesehatan" },
+          { value: "pernikahan", label: "Pernikahan" },
+          { value: "liburan", label: "Liburan" },
+          { value: "lainnya", label: "Kebutuhan Lainnya" },
+        ],
+      },
+    },
   },
   {
     id: "PROD-MIKRO",
@@ -33,6 +88,29 @@ const products: Array<Product> = [
       min_income: 2000000,
       tenor_type: "MONTH",
       tenor_options: [6, 12, 18, 24],
+    },
+    calculation: {
+      type: "FLAT",
+      rate: 0.5, // Monthly flat rate 0.5%
+      min_amount: 5000000, // 5 juta
+      max_amount: 100000000, // 100 juta
+    },
+    simulatorConfig: {
+      fields: {
+        required: ["loanAmount", "tenor"],
+        mikro: ["businessType"],
+      },
+      options: {
+        businessType: [
+          { value: "perdagangan", label: "Perdagangan" },
+          { value: "jasa", label: "Jasa" },
+          { value: "manufaktur", label: "Manufaktur" },
+          { value: "pertanian", label: "Pertanian" },
+          { value: "peternakan", label: "Peternakan" },
+          { value: "perikanan", label: "Perikanan" },
+          { value: "lainnya", label: "Lainnya" },
+        ],
+      },
     },
   },
 ];
